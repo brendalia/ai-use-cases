@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Use Cases – Save the Children Australia</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy:    #1F4E79;
+    --teal:    #1A7A6E;
+    --amber:   #C97D20;
+    --rose:    #A63D4F;
+    --slate:   #4A5E75;
+    --green:   #2E6B52;
+    --indigo:  #3D5A99;
+    --purple:  #7B5EA7;
+    --bg:      #F4F1EC;
+    --ink:     #1C1C1C;
+    --muted:   #7A7570;
+    --card-bg: #FDFBF8;
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    min-height: 100vh;
+    padding: 48px 32px 64px;
+  }
+
+  header {
+    text-align: center;
+    margin-bottom: 44px;
+  }
+
+  .eyebrow {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 12px;
+  }
+
+  h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(26px, 4vw, 42px);
+    color: var(--navy);
+    line-height: 1.15;
+    margin-bottom: 12px;
+  }
+
+  .subtitle {
+    font-size: 14.5px;
+    color: var(--muted);
+    font-weight: 300;
+    max-width: 580px;
+    margin: 0 auto 18px;
+    line-height: 1.65;
+  }
+
+  .tool-legend {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 11.5px;
+    color: var(--muted);
+  }
+
+  .legend-pill {
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border-radius: 4px;
+    padding: 2px 7px;
+  }
+  .legend-pill.copilot { background: #E4F0EB; color: #2E6B52; }
+  .legend-pill.claude  { background: #EDE8F5; color: #7B5EA7; }
+  .legend-pill.either  { background: #ECF0F4; color: #4A5E75; }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(315px, 1fr));
+    gap: 20px;
+    max-width: 1150px;
+    margin: 0 auto;
+  }
+
+  .section-card {
+    background: var(--card-bg);
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06), 0 0 0 1px rgba(0,0,0,0.04);
+    transition: box-shadow 0.25s ease, transform 0.25s ease;
+    opacity: 0;
+    animation: fadeUp 0.5s ease forwards;
+  }
+
+  .section-card:hover {
+    box-shadow: 0 8px 28px rgba(0,0,0,0.11), 0 0 0 1px rgba(0,0,0,0.06);
+    transform: translateY(-2px);
+  }
+
+  .section-card.review-card { border: 2px dashed var(--amber); }
+
+  .section-card:nth-child(1) { animation-delay: 0.04s; }
+  .section-card:nth-child(2) { animation-delay: 0.08s; }
+  .section-card:nth-child(3) { animation-delay: 0.12s; }
+  .section-card:nth-child(4) { animation-delay: 0.16s; }
+  .section-card:nth-child(5) { animation-delay: 0.20s; }
+  .section-card:nth-child(6) { animation-delay: 0.24s; }
+  .section-card:nth-child(7) { animation-delay: 0.28s; }
+  .section-card:nth-child(8) { animation-delay: 0.32s; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .card-header {
+    padding: 18px 20px 15px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .card-icon {
+    width: 36px; height: 36px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    font-size: 17px;
+  }
+
+  .card-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 15.5px;
+    line-height: 1.25;
+    padding-top: 2px;
+  }
+
+  .review-badge {
+    display: inline-block;
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    background: var(--amber);
+    color: white;
+    border-radius: 4px;
+    padding: 2px 6px;
+    margin-top: 5px;
+  }
+
+  .divider {
+    height: 1px;
+    background: rgba(0,0,0,0.06);
+    margin: 0 20px;
+  }
+
+  .use-list {
+    padding: 12px 20px 16px;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .use-item {
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid transparent;
+    transition: border-color 0.2s;
+  }
+
+  .use-item.open {
+    border-color: rgba(0,0,0,0.08);
+    background: rgba(0,0,0,0.015);
+  }
+
+  .use-trigger {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12.5px;
+    line-height: 1.45;
+    color: #3A3A3A;
+    padding: 6px 10px;
+    cursor: pointer;
+    user-select: none;
+    width: 100%;
+    background: none;
+    border: none;
+    text-align: left;
+    font-family: 'DM Sans', sans-serif;
+    transition: background 0.15s ease;
+    border-radius: 8px;
+  }
+
+  .use-trigger:hover { background: rgba(0,0,0,0.04); }
+
+  .use-dot {
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .use-name { font-weight: 500; flex: 1; }
+
+  .tool-tag {
+    font-size: 8.5px;
+    font-weight: 600;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    border-radius: 3px;
+    padding: 1px 5px;
+    flex-shrink: 0;
+  }
+  .tool-tag.copilot { background: #E4F0EB; color: #2E6B52; }
+  .tool-tag.claude  { background: #EDE8F5; color: #7B5EA7; }
+  .tool-tag.either  { background: #ECF0F4; color: #4A5E75; }
+
+  .chevron {
+    font-size: 9px;
+    color: var(--muted);
+    transition: transform 0.2s ease;
+    flex-shrink: 0;
+  }
+
+  .use-item.open .chevron { transform: rotate(180deg); }
+
+  .use-detail {
+    display: none;
+    padding: 2px 10px 12px 23px;
+    font-size: 12px;
+    color: #555;
+    line-height: 1.6;
+  }
+
+  .use-item.open .use-detail { display: block; }
+
+  .use-desc {
+    margin-bottom: 9px;
+    font-weight: 300;
+  }
+
+  .prompt-block {
+    background: rgba(0,0,0,0.04);
+    border-radius: 0 6px 6px 0;
+    padding: 8px 10px;
+    margin-bottom: 0;
+  }
+  .prompt-block + .prompt-block { margin-top: 7px; }
+
+  .prompt-block.copilot-block { border-left: 3px solid #2E6B52; }
+  .prompt-block.claude-block  { border-left: 3px solid #7B5EA7; }
+  .prompt-block.either-block  { border-left: 3px solid #4A5E75; }
+
+  .prompt-label {
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+
+  .prompt-text {
+    font-size: 11.5px;
+    color: #333;
+    font-style: italic;
+    line-height: 1.55;
+  }
+
+  .claude-note {
+    font-size: 11px;
+    color: var(--purple);
+    margin-top: 7px;
+    font-style: italic;
+  }
+
+  /* Colour themes */
+  .theme-navy   { --accent: var(--navy);   --bg-icon: #EAF0F7; }
+  .theme-teal   { --accent: var(--teal);   --bg-icon: #E3F2EF; }
+  .theme-slate  { --accent: var(--slate);  --bg-icon: #ECF0F4; }
+  .theme-green  { --accent: var(--green);  --bg-icon: #E4F0EB; }
+  .theme-rose   { --accent: var(--rose);   --bg-icon: #F5E9EC; }
+  .theme-amber  { --accent: var(--amber);  --bg-icon: #FBF0E3; }
+  .theme-indigo { --accent: var(--indigo); --bg-icon: #E8ECFA; }
+
+  .card-icon  { background: var(--bg-icon); color: var(--accent); }
+  .card-title { color: var(--accent); }
+  .use-dot    { background: var(--accent); }
+
+  footer {
+    text-align: center;
+    margin-top: 48px;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <p class="eyebrow">Save the Children Australia · International Programs</p>
+  <h1>Where AI can support<br><em>our work</em></h1>
+  <p class="subtitle">Click any use case to see a description and example prompt. Most use cases work with <strong>Copilot M365</strong>, available to all staff. A few are better suited to Claude — noted where relevant.</p>
+  <div class="tool-legend">
+    <div class="legend-item"><span class="legend-pill copilot">Copilot</span> Available to all staff</div>
+    <div class="legend-item"><span class="legend-pill claude">Claude</span> Select staff only</div>
+    <div class="legend-item"><span class="legend-pill either">Either</span> Works with both</div>
+  </div>
+</header>
+
+<div class="grid">
+
+  <!-- GCF Proposal Development -->
+  <div class="section-card theme-navy">
+    <div class="card-header">
+      <div class="card-icon">📋</div>
+      <div><div class="card-title">GCF Proposal Development</div></div>
+    </div>
+    <div class="divider"></div>
+    <ul class="use-list">
+
+      <li class="use-item">
+        <button class="use-trigger"><span class="use-dot"></span><span class="use-name">Evidence Synthesis</span><span class="tool-tag either">Either</span><span class="chevron">▼</span></button>
+        <div class="use-detail">
+          <p class="use-desc">Rapidly scan and synthesise peer-reviewed literature, IPCC reports, national adaptation plans, and grey literature to build a robust climate rationale and justify the theory of change.</p>
+          <div class="prompt-block either-block"><div class="prompt-label">Example prompt – Copilot or Claude</div><div class="prompt-text">"Summarise the latest evidence on climate change impacts on education in [country], drawing on IPCC reports, national adaptation plans, and recent peer-reviewed studies. Structure by: observed impacts, projected risks, and adaptation gaps."</div></div>
+        </div>
+      </li>
+
+      <li class="use-item">
+        <button class="use-trigger"><span class="use-dot"></span><span class="use-name">Quality Assurance</span><span class="tool-tag either">Either</span><span class="chevron">▼</span></button>
+        <div class="use-detail">
+          <p class="use-desc">Systematically check the full proposal pack against GCF requirements — completeness, coherence, eligibility criteria, and accreditation standards. Flag gaps before submission.</p>
+          <div class="prompt-block either-block"><div class="prompt-label">Example prompt – Copilot or Claude</div><div class="prompt-text">"Review the attached funding proposal against the GCF funding proposal template. For each required section, flag: (1) missing content, (2) internal inconsistencies, and (3) weak justifications. Output as a structured table."</div></div>
+          <p class="claude-note">★ Claude handles larger proposal packs more reliably due to its longer context window.</p>
+        </div>
+      </li>
+
+      <li class="use-item">
+        <button class="use-trigger"><span class="use-dot"></span><span class="use-name">Q&A – Knowledge Base</span><span class="tool-tag either">Either</span><span class="chevron">▼</span></button>
+        <div class="use-detail">
+          <p class="use-desc">Answer team and reviewer questions by drawing on the full proposal pack and portfolio precedents — useful for responding to GCF Secretariat queries and peer review comments.</p>
+          <div class="prompt-block either-block"><div class="prompt-label">Example prompt – Copilot or Claude</div><div class="prompt-text">"Using the attached proposal, draft a response to the following GCF Secretariat comment: [paste comment]. Keep the response under 300 words and reference specific sections of the proposal."</div></div>
+        </div>
+      </li>
+
+      <li class="use-item">
+        <button class="use-trigger"><span class="use-dot"></span><span class="use-name">Updates and Corrections</span><span class="tool-tag either">Either</span><span class="chevron">▼</span></button>
+        <div class="use-detail">
+          <p class="use-desc">When one section changes, identify all downstream sections affected and draft consistent updates across the concept note, funding proposal, annexes, and safeguards documentation.</p>
+          <div class="prompt-block either-block"><div class="prompt-label">Example prompt – Copilot or Claude</div><div class="prompt-text">"The total budget has changed from USD 8M to USD 6.5M. Review the attached proposal and identify every section that references budget figures or percentages, then suggest revised wording for each."</div></div>
+        </div>
+      </li>
+
+      <li class="use-item">
+        <button class="use-trigger"><span class="use-dot"></span><span class="use-name">Manualisation</span><span class="tool-tag copilot">Copilot</span><span class="chevron">▼</span></button>
+        <div class="use-detail">
+          <p class="use-desc">Translate institutional knowledge into structured how-to guides for proposal development, including where and how to use AI at each stage.</p>
+          <div class="prompt-block copilot-block"><div class="prompt-label">Example prompt – Copilot</div><div class="prompt-text">"Based on the attached process notes and past proposal checklist, draft a step-by-step guide for developing a GCF concept note. Include at each step where AI tools can assist and a suggested prompt."</div></div>
+        </div>
+      </li>
+
+      <li class="use-item">
+        <button class="use-trigger"><span class="use-dot"></span><span class="use-name">Portfolio Benchmarking</span><span class="tool-tag either">Either</span><span class="chevron">▼</span></button>
+        <div class="use-detail">
+          <p class="use-desc">Analyse approved GCF projects to identify patterns in successful proposals — structure, co-financing ratios, indicator frameworks — to strengthen our own submissions.</p>
+          <div class="prompt-block either-block"><div class="prompt-label">How to do it – Copilot or Claude</div><div class="prompt-text">Download 5–10 approved GCF project summaries from the GCF website, then ask: "Across these approved proposals, what are the most common co-financing ratios, result indicator types, and safeguard approaches? Summarise patterns in a table."</div></div>
+        </div>
+      </li>
+
+      <li class="use-item">
+        <button class="use-trigger"><span class="use-dot"></span><span class="use-name">Log Frame Review</span><span class="tool-tag either">Either</span><span class="chevron">▼</span></button>
+        <div class="use-detail">
+          <p class="use-desc">Check that outcomes, outputs, indicators, and assumptions are logically connected, SMART, and aligned with GCF's investment criteria and cross-cutting themes.</p>
+          <div class="prompt-block either-block"><div class="prompt-label">Example prompt – Copilot or Claude</div><div class="prompt-text">"Review the attached results framework. For each indicator: (1) assess whether it is SMART, (2) check logical alignment with its parent output/outcome, and (3) flag any gaps in gender or indigenous peoples' cross-cutting coverage."</div></div>
+        </div>
+      </li>
+
+    </ul>
+  </div>
+
+  <!-- Project TA -->
+  <div class="section-card theme-teal">
+    <div class="card-header">
+      <div class="card-icon">🤝</div>
+      <div><div class="card-title">Project Technical Assistance</div></div>
+    </div>
+    <div class="divider"></div>
+    <ul class="use-list">
+
+      <li class="use-item">
+        <button class="use-trigger"><span class="use-dot"></span><span class="use-name">Unpacking the Proposal</span><span class="tool-tag copilot">Copilot</span><span class="chevron">▼</span></button>
+        <div class="use-detail">
+          <p class="use-desc">Distil complex funding proposals into clear, stakeholder-specific briefs — for country teams, government partners, or onboarding documents for new staff.</p>
+          <div class="prompt-block copilot-block"><div class="prompt-label">Example prompt – Copilot</div><div class="prompt-text">"From the attached funding proposal, create a 1-page implementation brief for the country team. Focus on: key activities by year, responsible parties, major milestones, and top 3 risks. Use plain language, avoid jargon."</div></div>
+        </div>
+      </li>
+
+      <li class="use-item">
+        <button class="use-trigger"><span class="use-dot"></span><span class="use-name">Q&A – Project Knowledge Base</span><span class="tool-tag either">Either</span><span class="chevron">▼</span></button>
+        <div class="use-detail">
+          <p class="use-desc">Allow team members to query the full project pack in plain language, and surface relevant precedents or lessons from similar projects across the portfolio.</p>
+          <div class="prompt-block either-block"><div class="prompt-label">How to do it – Copilot or Claude</div><div class="prompt-text">Upload your full project pack and say: "This is the full documentation for Project X. Answer questions about it as I ask them." Then ask anything — e.g. "What is the indicator target for Output 2.3?" or "What does the proposal say about grievance mechanisms?"</div></div>
+          <p class="claude-note">★ Claude handles larger document sets more reliably for this use case.</p>
+        </div>
+      </li>
+
+      <li class="use-item">
+        <button class="use-trigger"><span class="use-dot"></span><span class="use-name">Evidence Synthesis</span><span class="tool-tag either">Either</span><span class="chevron">▼</span></button>
+        <div class="use-detail">
+          <p class="use-desc">Aggregate learning from progress reports, evaluations, and field notes to surface what's working, what isn't, and emerging good practice for adaptive management decisions.</p>
+          <div class="prompt-block either-block"><div class="prompt-label">Example prompt – Copilot or Claude</div><div class="prompt-text">"Attached are progress reports from the last 3 reporting periods. Identify: (1) recurring implementation challenges, (2) activities consistently on or ahead of track, and (3) any emerging lessons relevant to our adaptive management plan."</div></div>
+        </div>
+      </li>
+
+    </ul>
+  </div>
+
+  <!-- Portfolio Management -->
+  <div class="section-card theme-slate">
+    <div class="card-header">
+      <div class="card-icon">📊</div>
+      <div><div class="card-title">Portfolio Management</div></div>
+    </div>
+    <div class="divider"></div>
+    <ul class="use-list">
+
+      <li class="use-item">
+        <button class="use-trigger"><span class="use-dot"></span><span class="use-name">Data Aggregation and Synthesis</span><span class="tool-tag copilot">Copilot</span><span class="chevron">▼</span></button>
+        <div class="use-detail">
+          <p class="use-desc">Consolidate project-level data into portfolio-level summaries for reporting to GCF, SCA leadership, and donors. Reduces manual compilation across spreadsheets.</p>
+          <div class="prompt-block copilot-block"><div class="prompt-label">How to do it – Copilot</div><div class="prompt-text">Export indicator data and narrative updates from each project into a single document or spreadsheet, then ask Copilot: "Summarise portfolio-level progress across these projects, highlighting combined reach figures, common themes in qualitative updates, and any projects flagging risks."</div></div>
+        </div>
+      </li>
+
+      <li class="use-item">
+        <button class="use-trigger"><span class="use-dot"></span><span class="use-name">Risk and Issue Monitoring</span><span class="tool-tag either">Either</span><span class="chevron">▼</span></button>
+        <div class="use-detail">
+          <p class="use-desc">Scan progress reports, meeting recordings, and emails to flag recurring risks, implementation bottlenecks, and emerging issues that need escalation.</p>
+          <div class="prompt-block either-block"><div class="prompt-label">Example prompt – Copilot or Claude</div><div class="prompt-text">"Attached are the last quarterly progress report, minutes from the last 3 project meetings, and a thread of emails with the country team. Identify any risks or issues mentioned more than once and assess whether any require escalation."</div></div>
+          <p class="claude-note">★ Copilot can also do this directly in Outlook and Teams if your documents live in M365.</p>
+        </div>
+      </li>
+
+    </ul>
+  </div>
+
+  <!-- Procurement -->
+  <div class="section-card theme-indigo">
+    <div class="card-header">
+      <div class="card-icon">🔍</div>
+      <div><div class="card-title">Procurement</div></div>
+    </div>
+    <div class="divider"></div>
+    <ul class="use-list">
+
+      <li class="use-item">
+        <button class="use-trigger"><span class="use-dot"></span><span class="use-name">Supplier/Consultant Shortlisting</span><span class="tool-tag either">Either</span><span class="chevron">▼</span></button>
+        <div class="use-detail">
+          <p class="use-desc">Screen a long list of expressions of interest against minimum eligibility criteria before full assessment. AI produces a structured summary of each candidate and flags those that clearly don't meet threshold requirements — saving significant reading time up front.</p>
+          <div class="prompt-block either-block"><div class="prompt-label">Example prompt – Copilot or Claude</div><div class="prompt-text">"Attached are 20 expressions of interest for [assignment]. Using the eligibility criteria below [paste criteria], assess each applicant and produce a table showing: name, whether they meet each criterion (yes/no/partial), and a one-line rationale. Flag any that clearly fail threshold requirements."</div></div>
+        </div>
+      </li>
+
+      <li class="use-item">
+        <button class="use-trigger"><span class="use-dot"></span><span class="use-name">Tender Proposals Assessment</span><span class="tool-tag claude">Claude</span><span class="chevron">▼</span></button>
+        <div class="use-detail">
+          <p class="use-desc">Support the full technical assessment of tender proposals by co-developing a scoring framework with sub-criteria, mapping evidence from each proposal against the criteria, scoring proposals with justified rationales, and producing a comparative pros-and-cons summary for final decision-making. Human review and final scoring decisions remain with the team.</p>
+          <div class="prompt-block claude-block"><div class="prompt-label">How to do it – Claude (recommended for large proposal sets)</div><div class="prompt-text">This is a multi-step process: (1) "Help me develop sub-criteria and a scoring rubric for the following assessment criteria: [paste criteria]." Iterate with your team. (2) "Using the attached proposals and the scoring framework, create an evidence map — for each proposal, summarise the evidence against each criterion." (3) "Using the evidence map, score each proposal per criterion with a brief justification." (4) "Produce a one-page pros and cons summary for each shortlisted proposal to support our final decision."</div></div>
+          <p class="claude-note">★ Claude Sonnet and Opus are both well-suited for this. Running assessments in both and having colleagues compare responses improves reliability and reduces bias.</p>
+        </div>
+      </li>
+
+      <li class="use-item">
+        <button class="use-trigger"><span class="use-dot"></span><span class="use-name">Proposed Budget Analysis</span><span class="tool-tag either">Either</span><span class="chevron">▼</span></button>
+        <div class="use-detail">
+          <p class="use-desc">Analyse consultant or partner budgets for internal consistency, reasonableness of rates, and alignment with the scope of work. Flag unusually high or low line items, check that budget narratives match the figures, and identify missing cost categories or assumptions.</p>
+          <div class="prompt-block either-block"><div class="prompt-label">Example prompt – Copilot or Claude</div><div class="prompt-text">"Attached are the Terms of Reference and the consultant's proposed budget. Assess the budget for: (1) whether all ToR deliverables are costed, (2) any line items that appear unusually high or low given the scope, (3) consistency between the budget narrative and the figures, and (4) any costs or assumptions that are missing or unclear."</div></div>
+          <p class="claude-note">★ For complex multi-partner budgets with many line items, Claude handles the full document more reliably than Copilot.</p>
+        </div>
+      </li>
+
+    </ul>
+  </div>
+
+  <!-- Programming -->
+  <div class="section-card theme-green">
+    <div class="card-header">
+      <div class="card-icon">🌍</div>
+      <div><div class="card-title">Programming</div></div>
+    </div>
+    <div class="divider"></div>
+    <ul class="use-list">
+
+      <li class="use-item">
+        <button class="use-trigger"><span class="use-dot"></span><span class="use-name">Early Warning Systems</span><span class="tool-tag copilot">Copilot</span><span class="chevron">▼</span></button>
+        <div class="use-detail">
+          <p class="use-desc">Strengthen EWS by integrating AI-powered forecasting tools that improve accuracy and lead time of climate hazard predictions, enabling earlier and more targeted community alerts.</p>
+          <div class="prompt-block copilot-block"><div class="prompt-label">How to do it – Copilot</div><div class="prompt-text">This is more about system design than a single prompt. Ask Copilot to help you research AI-powered forecasting tools (e.g. Google DeepMind's weather models, FEWS NET integrations) and draft a scoping brief on how they could enhance your existing EWS in a specific country context.</div></div>
+        </div>
+      </li>
+
+      <li class="use-item">
+        <button class="use-trigger"><span class="use-dot"></span><span class="use-name">Awareness and Knowledge Products</span><span class="tool-tag copilot">Copilot</span><span class="chevron">▼</span></button>
+        <div class="use-detail">
+          <p class="use-desc">Draft, adapt, and localise behaviour change communication materials, training content, policy briefs, and community resources tailored by audience, reading level, and format.</p>
+          <div class="prompt-block copilot-block"><div class="prompt-label">Example prompt – Copilot</div><div class="prompt-text">"Rewrite the attached technical brief on heat-resilient schools for a community audience with low literacy. Use short sentences, no jargon, and a question-and-answer format. Aim for a Grade 5 reading level."</div></div>
+        </div>
+      </li>
+
+      <li class="use-item">
+        <button class="use-trigger"><span class="use-dot"></span><span class="use-name">Translation and Localisation</span><span class="tool-tag copilot">Copilot</span><span class="chevron">▼</span></button>
+        <div class="use-detail">
+          <p class="use-desc">Translate and culturally adapt project documents, data collection tools, community materials, and reports across languages.</p>
+          <div class="prompt-block copilot-block"><div class="prompt-label">Example prompt – Copilot</div><div class="prompt-text">"Translate the attached community feedback survey into Bahasa Indonesia. After translating, flag any questions where the phrasing may not be culturally appropriate and suggest alternatives."</div></div>
+        </div>
+      </li>
+
+      <li class="use-item">
+        <button class="use-trigger"><span class="use-dot"></span><span class="use-name">Curriculum and Training Design</span><span class="tool-tag copilot">Copilot</span><span class="chevron">▼</span></button>
+        <div class="use-detail">
+          <p class="use-desc">Develop training programmes, facilitator guides, and learning assessments for climate adaptation, DRR, or M&E capacity building with government and community counterparts.</p>
+          <div class="prompt-block copilot-block"><div class="prompt-label">Example prompt – Copilot</div><div class="prompt-text">"Design a 2-day training programme for district education officers on integrating climate risk into school planning. Include: learning objectives, session outlines, facilitator notes, and a short post-training assessment."</div></div>
+        </div>
+      </li>
+
+    </ul>
+  </div>
+
+  <!-- Project M&E -->
+  <div class="section-card theme-rose">
+    <div class="card-header">
+      <div class="card-icon">📈</div>
+      <div><div class="card-title">Project M&amp;E</div></div>
+    </div>
+    <div class="divider"></div>
+    <ul class="use-list">
+
+      <li class="use-item">
+        <button class="use-trigger"><span class="use-dot"></span><span class="use-name">Automated Data Collection</span><span class="tool-tag copilot">Copilot</span><span class="chevron">▼</span></button>
+        <div class="use-detail">
+          <p class="use-desc">Deploy automated voice or SMS-based surveys for household data collection, post-event monitoring after extreme weather events, and community feedback.</p>
+          <div class="prompt-block copilot-block"><div class="prompt-label">How to do it – Copilot</div><div class="prompt-text">Tools like KoboToolbox, Twilio, or Viamo handle the automation. Use Copilot to design the survey logic first: "Draft a 10-question SMS survey to collect post-flood impact data from households. Include branching logic for households with school-age children."</div></div>
+        </div>
+      </li>
+
+      <li class="use-item">
+        <button class="use-trigger"><span class="use-dot"></span><span class="use-name">Data Cleaning and Validation</span><span class="tool-tag either">Either</span><span class="chevron">▼</span></button>
+        <div class="use-detail">
+          <p class="use-desc">Automate checks for completeness, outliers, inconsistencies, and duplicates, generating flagging reports for enumerator follow-up before analysis.</p>
+          <div class="prompt-block either-block"><div class="prompt-label">Example prompt – Copilot or Claude</div><div class="prompt-text">"Attached is a survey dataset in CSV format. Check for: missing values in key variables, duplicate respondent IDs, out-of-range responses, and logical inconsistencies (e.g. respondent is under 18 but listed as household head). Output a flagging report."</div></div>
+        </div>
+      </li>
+
+      <li class="use-item">
+        <button class="use-trigger"><span class="use-dot"></span><span class="use-name">Translation of M&E Tools</span><span class="tool-tag copilot">Copilot</span><span class="chevron">▼</span></button>
+        <div class="use-detail">
+          <p class="use-desc">Translate survey instruments, KII guides, and FGD protocols while maintaining technical accuracy and cultural appropriateness across languages.</p>
+          <div class="prompt-block copilot-block"><div class="prompt-label">Example prompt – Copilot</div><div class="prompt-text">"Translate the attached KII guide into Khmer. Preserve the intent of each probing question. Flag any questions that may be sensitive or culturally awkward in a Cambodian context and suggest alternative phrasing."</div></div>
+        </div>
+      </li>
+
+      <li class="use-item">
+        <button class="use-trigger"><span class="use-dot"></span><span class="use-name">Data Analysis</span><span class="tool-tag either">Either</span><span class="chevron">▼</span></button>
+        <div class="use-detail">
+          <p class="use-desc">Run descriptive and inferential analysis on quantitative datasets, code qualitative data thematically, and generate annotated outputs ready for reporting.</p>
+          <div class="prompt-block either-block"><div class="prompt-label">Example prompt – Copilot or Claude</div><div class="prompt-text">"Attached are 45 KII transcripts from our midline evaluation. Conduct a thematic analysis focused on: barriers to school attendance during extreme weather events, community perceptions of the EWS, and suggestions for improvement. Present findings by theme with illustrative quotes."</div></div>
+          <p class="claude-note">★ Claude handles large sets of qualitative transcripts more reliably due to its longer context window.</p>
+        </div>
+      </li>
+
+      <li class="use-item">
+        <button class="use-trigger"><span class="use-dot"></span><span class="use-name">Reporting</span><span class="tool-tag copilot">Copilot</span><span class="chevron">▼</span></button>
+        <div class="use-detail">
+          <p class="use-desc">Draft results sections and progress narratives structured to meet SCI reporting templates and donor requirements, with placeholders for team validation.</p>
+          <div class="prompt-block copilot-block"><div class="prompt-label">Example prompt – Copilot</div><div class="prompt-text">"Using the attached indicator data table and project summary, draft the results narrative section for our GCF annual progress report. Follow the SCI reporting template structure. Where data is missing, insert a [PLACEHOLDER – verify with country team] note."</div></div>
+        </div>
+      </li>
+
+      <li class="use-item">
+        <button class="use-trigger"><span class="use-dot"></span><span class="use-name">Visualisation</span><span class="tool-tag copilot">Copilot</span><span class="chevron">▼</span></button>
+        <div class="use-detail">
+          <p class="use-desc">Generate charts, maps, dashboards, and infographics for different audiences — from technical log frame progress to community-facing impact stories.</p>
+          <div class="prompt-block copilot-block"><div class="prompt-label">How to do it – Copilot</div><div class="prompt-text">Share your indicator data and ask Copilot: "Suggest the 5 most impactful ways to visualise this results data for a donor report. For each, describe the chart type, what it shows, and what story it tells." Then build them directly in Excel or Power BI within M365.</div></div>
+        </div>
+      </li>
+
+    </ul>
+  </div>
+
+  <!-- Climate and Education -->
+  <div class="section-card theme-amber review-card">
+    <div class="card-header">
+      <div class="card-icon">🎓</div>
+      <div>
+        <div class="card-title">Climate &amp; Education</div>
+        <div class="review-badge">For review by C&amp;E team</div>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <ul class="use-list">
+
+      <li class="use-item">
+        <button class="use-trigger"><span class="use-dot"></span><span class="use-name">NAP and Education Budget Analysis</span><span class="tool-tag either">Either</span><span class="chevron">▼</span></button>
+        <div class="use-detail">
+          <p class="use-desc">Scan national adaptation plans and education budget documents to assess how well education is integrated and generate evidence-based recommendations for government counterparts.</p>
+          <div class="prompt-block either-block"><div class="prompt-label">Example prompt – Copilot or Claude</div><div class="prompt-text">"Attached is [country]'s National Adaptation Plan and the most recent education sector budget. Assess: (1) whether education is explicitly mentioned in the NAP, (2) whether adaptation measures are costed and funded in the education budget, and (3) the top 3 gaps or recommendations."</div></div>
+        </div>
+      </li>
+
+      <li class="use-item">
+        <button class="use-trigger"><span class="use-dot"></span><span class="use-name">Advocacy and Communications</span><span class="tool-tag copilot">Copilot</span><span class="chevron">▼</span></button>
+        <div class="use-detail">
+          <p class="use-desc">Draft advocacy briefs, opinion pieces, talking points, and campaign content. Adapt a single piece for multiple audiences — from a technical policy brief to social media or ministerial talking points.</p>
+          <div class="prompt-block copilot-block"><div class="prompt-label">Example prompt – Copilot</div><div class="prompt-text">"Using the attached evidence brief, produce three versions of the key message on climate finance for education: (1) a 2-page policy brief for a ministry audience, (2) a set of 5 talking points for a ministerial meeting, and (3) three LinkedIn posts."</div></div>
+        </div>
+      </li>
+
+      <li class="use-item">
+        <button class="use-trigger"><span class="use-dot"></span><span class="use-name">Resource Library Curation</span><span class="tool-tag copilot">Copilot</span><span class="chevron">▼</span></button>
+        <div class="use-detail">
+          <p class="use-desc">Review, summarise, tag, and categorise new submissions to climateandeducation.org to keep the library useful and searchable as content volume grows.</p>
+          <div class="prompt-block copilot-block"><div class="prompt-label">Example prompt – Copilot</div><div class="prompt-text">"Attached is a new resource submitted for the library. Provide: (1) a 3-sentence summary, (2) suggested tags from this list [paste tag list], (3) geographic focus, (4) recommended content type category, and (5) target audience."</div></div>
+        </div>
+      </li>
+
+      <li class="use-item">
+        <button class="use-trigger"><span class="use-dot"></span><span class="use-name">Country Context Synthesis</span><span class="tool-tag either">Either</span><span class="chevron">▼</span></button>
+        <div class="use-detail">
+          <p class="use-desc">Rapidly synthesise country-specific climate, education, and policy data to support TA missions, proposal development, or briefings for government officials and ministry counterparts.</p>
+          <div class="prompt-block either-block"><div class="prompt-label">Example prompt – Copilot or Claude</div><div class="prompt-text">"Prepare a country brief for [country] covering: (1) top 3 climate hazards affecting education, (2) current state of climate education policy, (3) key government stakeholders in education and climate, and (4) any existing SCI or partner programming. Use publicly available sources."</div></div>
+        </div>
+      </li>
+
+      <li class="use-item">
+        <button class="use-trigger"><span class="use-dot"></span><span class="use-name">QA for Commissioned Reports</span><span class="tool-tag either">Either</span><span class="chevron">▼</span></button>
+        <div class="use-detail">
+          <p class="use-desc">Review consultant reports against the original terms of reference, checking completeness, logical coherence, methodological rigour, and quality of recommendations. Draft structured feedback.</p>
+          <div class="prompt-block either-block"><div class="prompt-label">Example prompt – Copilot or Claude</div><div class="prompt-text">"Attached are the Terms of Reference and the consultant's draft report. Assess: (1) whether all deliverables have been addressed, (2) methodological rigour, (3) whether recommendations are evidence-based and actionable. Draft feedback as a structured memo to the consultant."</div></div>
+        </div>
+      </li>
+
+    </ul>
+  </div>
+
+</div>
+
+<footer>
+  Save the Children Australia · International Programs · 2026 &nbsp;·&nbsp; Click any use case to expand
+</footer>
+
+<script>
+  document.querySelectorAll('.use-trigger').forEach(trigger => {
+    trigger.addEventListener('click', () => {
+      const item = trigger.closest('.use-item');
+      const isOpen = item.classList.contains('open');
+      trigger.closest('.use-list').querySelectorAll('.use-item').forEach(i => i.classList.remove('open'));
+      if (!isOpen) item.classList.add('open');
+    });
+  });
+</script>
+
+</body>
+</html>
