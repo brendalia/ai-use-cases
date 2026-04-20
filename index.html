@@ -267,8 +267,7 @@
     height: 10px;
     border-radius: 50%;
     flex-shrink: 0;
-  }
-  .section-title {
+  }  .section-title {
     font-size: 13px;
     font-weight: 500;
     letter-spacing: .06em;
@@ -433,8 +432,31 @@
   }
   .btn:hover { background: var(--surface-mid); border-color: var(--ink-soft); }
   .btn-copy.copied { background: var(--green-pale); border-color: var(--green-bright); color: var(--green-dark); }
-  .btn-agent { background: var(--green-pale); border-color: var(--green-light); color: var(--green-dark); }
-  .btn-agent:hover { background: var(--green-light); border-color: var(--green-bright); }
+  .btn-agent { background: var(--green-dark); border-color: var(--green-dark); color: #fff; font-size: 13px; padding: 6px 16px; }
+  .btn-agent:hover { background: var(--green-mid); border-color: var(--green-mid); color: #fff; }
+ 
+  /* ── Agent banner ── */
+  .agent-banner {
+    background: linear-gradient(90deg, #edf8f3 0%, #d4f0e5 100%);
+    border-bottom: 1px solid var(--green-light);
+    color: var(--green-dark);
+    font-size: 12px;
+    font-weight: 500;
+    padding: 7px 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .card.has-agent { border-color: var(--green-light); }
+  .card.has-agent:hover { border-color: var(--green-bright); }
+  .card.has-agent.expanded { border-color: var(--green-bright); }
+ 
+  /* ── Section emoji ── */
+  .section-emoji {
+    font-size: 18px;
+    line-height: 1;
+    flex-shrink: 0;
+  }
  
   /* ── Empty state ── */
   .empty-state {
@@ -476,7 +498,7 @@
       Save the Children · Climate Change Division
     </div>
     <h1><strong>AI Use Cases</strong> &amp; Prompt Library</h1>
-    <p>A shared reference for the CCD team — copy prompts directly into Copilot, Claude, or other approved tools. Adjust context (project name, country, document) as needed.</p>
+    <p>A shared reference for the CCD team — copy prompts directly into Copilot, Claude, or other approved tools. Adjust the context (project name, country, document) as needed, and save new prompts back here so everyone benefits! 🌱</p>
     <div class="header-stats">
       <div class="stat"><span class="stat-num">20</span><span class="stat-label">Use cases</span></div>
       <div class="stat"><span class="stat-num">4</span><span class="stat-label">Categories</span></div>
@@ -488,16 +510,15 @@
 <div class="tips-strip">
   <div class="tips-inner">
     <button class="tips-toggle" id="tips-btn" onclick="toggleTips()">
-      <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="8" cy="8" r="7"/><path d="M8 7v5M8 5v.5"/></svg>
-      Prompt tips — what to include in a good prompt
+      💡 Prompt tips — what makes a good prompt?
       <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6l4 4 4-4"/></svg>
     </button>
     <div class="tips-content" id="tips-content">
       <div class="tips-grid">
-        <div class="tip-item"><div class="tip-letter">Role</div><div class="tip-text">What role should the AI take? e.g. "You are an M&amp;E specialist…"</div></div>
-        <div class="tip-item"><div class="tip-letter">Task</div><div class="tip-text">What do you want it to do? Be specific about the action.</div></div>
-        <div class="tip-item"><div class="tip-letter">Context</div><div class="tip-text">What information or documents should it use?</div></div>
-        <div class="tip-item"><div class="tip-letter">Output</div><div class="tip-text">What format do you want? e.g. table, bullet list, memo, 300 words.</div></div>
+        <div class="tip-item"><div class="tip-letter">🎭 Role</div><div class="tip-text">What role should the AI take? e.g. "You are an M&amp;E specialist…"</div></div>
+        <div class="tip-item"><div class="tip-letter">✅ Task</div><div class="tip-text">What do you want it to do? Be specific about the action.</div></div>
+        <div class="tip-item"><div class="tip-letter">📎 Context</div><div class="tip-text">What information or documents should it use?</div></div>
+        <div class="tip-item"><div class="tip-letter">📄 Output</div><div class="tip-text">What format do you want? e.g. table, bullet list, memo, 300 words.</div></div>
       </div>
     </div>
   </div>
@@ -507,10 +528,10 @@
   <div class="controls">
     <div class="filter-pills" id="filters">
       <button class="pill active" data-cat="all">All <span id="all-count"></span></button>
-      <button class="pill" data-cat="Proposal Development">Proposal development</button>
-      <button class="pill" data-cat="Project Implementation">Project implementation</button>
-      <button class="pill" data-cat="Procurement">Procurement</button>
-      <button class="pill" data-cat="General Productivity">General productivity</button>
+      <button class="pill" data-cat="Proposal Development">📋 Proposal development</button>
+      <button class="pill" data-cat="Project Implementation">🤝 Project implementation</button>
+      <button class="pill" data-cat="Procurement">🔍 Procurement</button>
+      <button class="pill" data-cat="General Productivity">📈 General productivity</button>
     </div>
     <div class="search-wrap">
       <svg class="search-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="9" cy="9" r="5.5"/><path d="M14 14l3 3"/></svg>
@@ -710,10 +731,16 @@ const CAT_CHIP = {
   'General Productivity': 'chip-productivity'
 };
 const CAT_SHORT = {
-  'Proposal Development': 'Proposal',
-  'Project Implementation': 'Implementation',
-  'Procurement': 'Procurement',
-  'General Productivity': 'Productivity'
+  'Proposal Development': '📋 Proposal',
+  'Project Implementation': '🤝 Implementation',
+  'Procurement': '🔍 Procurement',
+  'General Productivity': '📈 Productivity'
+};
+const CAT_EMOJI = {
+  'Proposal Development': '📋',
+  'Project Implementation': '🤝',
+  'Procurement': '🔍',
+  'General Productivity': '📈'
 };
  
 let activeFilter = 'all';
@@ -779,7 +806,7 @@ function render() {
     const items = filtered.filter(c => c.cat === cat);
     if (!items.length) return;
     html += `<div class="section-header">
-      <span class="section-dot" style="background:${CAT_DOTS[cat]}"></span>
+      <span class="section-emoji">${CAT_EMOJI[cat]}</span>
       <span class="section-title">${cat}</span>
       <span class="section-count">${items.length} use case${items.length !== 1 ? 's' : ''}</span>
     </div>
@@ -789,11 +816,12 @@ function render() {
       const idx = CASES.indexOf(c);
       const isExp = expanded.has(idx);
       const linksHtml = (() => {
-        if (c.links) return c.links.map(l => `<a class="btn btn-agent" href="${l.url}" target="_blank">${l.label} ↗</a>`).join('');
-        if (c.link) return `<a class="btn btn-agent" href="${c.link}" target="_blank">Open agent ↗</a>`;
+        if (c.links) return c.links.map(l => `<a class="btn btn-agent" href="${l.url}" target="_blank">🤖 ${l.label} ↗</a>`).join('');
+        if (c.link) return `<a class="btn btn-agent" href="${c.link}" target="_blank">🤖 Open agent ↗</a>`;
         return '';
       })();
-      html += `<div class="card${isExp ? ' expanded' : ''}" id="card-${idx}">
+      html += `<div class="card${isExp ? ' expanded' : ''}${c.agent ? ' has-agent' : ''}" id="card-${idx}">
+        ${c.agent ? `<div class="agent-banner">🤖 Agent available — ready to use!</div>` : ''}
         <div class="card-top" onclick="toggleCard(${idx})">
           <div class="card-meta">
             <div class="card-title">${c.title}</div>
@@ -803,12 +831,11 @@ function render() {
         </div>
         <div class="card-footer">
           <div class="badge-row">
-            ${c.agent ? '<span class="badge badge-agent">Agent</span>' : ''}
-            ${c.coming ? '<span class="badge badge-coming">Coming soon</span>' : ''}
-            ${c.claude ? '<span class="badge badge-claude">Claude recommended</span>' : ''}
+            ${c.coming ? '<span class="badge badge-coming">🧑‍💻 Coming soon</span>' : ''}
+            ${c.claude ? '<span class="badge badge-claude">✦ Claude recommended</span>' : ''}
           </div>
           <div class="expand-hint" onclick="toggleCard(${idx})" style="cursor:pointer">
-            <span>${isExp ? 'Collapse' : 'Expand prompt'}</span>
+            <span>${isExp ? 'Collapse' : 'See prompt'}</span>
             <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6l4 4 4-4"/></svg>
           </div>
         </div>
@@ -824,7 +851,7 @@ function render() {
             </div>
             <div class="btn-row">
               ${linksHtml}
-              ${!c.coming ? `<button class="btn btn-copy" onclick="copyPrompt(${idx}, this)">Copy prompt</button>` : ''}
+              ${!c.coming ? `<button class="btn btn-copy" onclick="copyPrompt(${idx}, this)">📋 Copy prompt</button>` : ''}
             </div>
           </div>
         </div>
