@@ -6,6 +6,7 @@
 <title>CCD AI Use Cases & Prompt Library</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <style>
   :root {
     --green-dark: #0a5c44;
@@ -35,18 +36,18 @@
     --shadow-sm: 0 1px 3px rgba(0,0,0,.07), 0 1px 2px rgba(0,0,0,.04);
     --shadow-md: 0 4px 12px rgba(0,0,0,.08), 0 2px 4px rgba(0,0,0,.04);
   }
- 
+
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
- 
+
   body {
     font-family: 'DM Sans', sans-serif;
     background: #f0f5f2;
     color: var(--ink);
     min-height: 100vh;
-    font-size: 15px;
+    font-size: 17px;
     line-height: 1.6;
   }
- 
+
   /* ── Header ── */
   header {
     background: var(--green-dark);
@@ -78,8 +79,8 @@
     background: rgba(255,255,255,.12);
     border: 1px solid rgba(255,255,255,.2);
     border-radius: 20px;
-    padding: 4px 14px;
-    font-size: 12px;
+    padding: 5px 15px;
+    font-size: 13px;
     font-weight: 500;
     color: rgba(255,255,255,.85);
     letter-spacing: .04em;
@@ -87,7 +88,7 @@
     margin-bottom: 1rem;
   }
   header h1 {
-    font-size: clamp(1.6rem, 4vw, 2.4rem);
+    font-size: clamp(1.9rem, 4.5vw, 2.7rem);
     font-weight: 300;
     color: #ffffff;
     line-height: 1.25;
@@ -97,8 +98,8 @@
   header h1 strong { font-weight: 500; }
   header p {
     color: rgba(255,255,255,.7);
-    font-size: 15px;
-    max-width: 540px;
+    font-size: 17px;
+    max-width: 580px;
     line-height: 1.6;
     margin-bottom: 2rem;
   }
@@ -113,18 +114,18 @@
     gap: 2px;
   }
   .stat-num {
-    font-size: 1.6rem;
+    font-size: 1.85rem;
     font-weight: 500;
     color: #ffffff;
     line-height: 1;
   }
   .stat-label {
-    font-size: 12px;
+    font-size: 13px;
     color: rgba(255,255,255,.6);
     text-transform: uppercase;
     letter-spacing: .05em;
   }
- 
+
   /* ── Tips strip ── */
   .tips-strip {
     background: var(--green-mid);
@@ -141,7 +142,7 @@
     gap: 8px;
     cursor: pointer;
     color: rgba(255,255,255,.85);
-    font-size: 13px;
+    font-size: 15px;
     font-weight: 500;
     user-select: none;
     background: none;
@@ -168,7 +169,7 @@
     padding: .75rem 1rem;
   }
   .tip-letter {
-    font-size: 11px;
+    font-size: 12.5px;
     font-weight: 500;
     letter-spacing: .08em;
     color: rgba(255,255,255,.5);
@@ -176,18 +177,71 @@
     margin-bottom: 4px;
   }
   .tip-text {
-    font-size: 13px;
+    font-size: 14.5px;
     color: rgba(255,255,255,.85);
     line-height: 1.5;
   }
- 
+
+  /* ── Leaderboard strip ── */
+  .lb-strip {
+    background: var(--green-bright);
+    border-bottom: 1px solid rgba(0,0,0,.08);
+  }
+  .lb-inner {
+    max-width: 1060px;
+    margin: 0 auto;
+    padding: 1rem 2rem;
+  }
+  .lb-toggle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    color: #ffffff;
+    font-size: 15px;
+    font-weight: 500;
+    user-select: none;
+    background: none;
+    border: none;
+    font-family: inherit;
+  }
+  .lb-toggle svg { transition: transform .2s; flex-shrink: 0; }
+  .lb-toggle.open svg { transform: rotate(180deg); }
+  .lb-content {
+    display: none;
+    padding-top: 1.25rem;
+    padding-bottom: .5rem;
+  }
+  .lb-content.open { display: block; }
+  .lb-card {
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem 1.5rem 1.75rem;
+    box-shadow: var(--shadow-md);
+  }
+  .lb-title { font-size: 18px; font-weight: 500; color: var(--ink); margin-bottom: .3rem; }
+  .lb-sub { font-size: 14.5px; color: var(--ink-soft); margin-bottom: 1.25rem; }
+  .lb-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 12px;
+    margin-bottom: 1.5rem;
+  }
+  .lb-stat { background: var(--green-pale); border-radius: var(--radius); padding: .9rem 1rem; }
+  .lb-stat .l { font-size: 13px; color: var(--ink-soft); margin-bottom: 5px; }
+  .lb-stat .v { font-size: 26px; font-weight: 500; color: var(--green-dark); }
+  .lb-legend { display: flex; flex-wrap: wrap; gap: 10px 18px; margin-bottom: 14px; font-size: 14px; color: var(--ink-mid); }
+  .lb-legend span { display: flex; align-items: center; gap: 7px; }
+  .lb-swatch { width: 18px; height: 0; display: inline-block; }
+  .lb-chartbox { position: relative; width: 100%; height: 460px; }
+
   /* ── Main layout ── */
   main {
     max-width: 1060px;
     margin: 0 auto;
     padding: 2rem 2rem 4rem;
   }
- 
+
   /* ── Controls ── */
   .controls {
     display: flex;
@@ -203,9 +257,9 @@
     flex: 1;
   }
   .pill {
-    padding: 6px 16px;
+    padding: 7px 17px;
     border-radius: 20px;
-    font-size: 13px;
+    font-size: 14.5px;
     font-weight: 500;
     border: 1.5px solid var(--border-strong);
     background: var(--surface);
@@ -232,10 +286,10 @@
     height: 16px;
   }
   .search-input {
-    padding: 8px 12px 8px 34px;
+    padding: 9px 12px 9px 34px;
     border: 1.5px solid var(--border-strong);
     border-radius: 20px;
-    font-size: 13px;
+    font-size: 14.5px;
     font-family: inherit;
     background: var(--surface);
     color: var(--ink);
@@ -245,14 +299,14 @@
   }
   .search-input:focus { border-color: var(--green-bright); }
   .search-input::placeholder { color: var(--ink-pale); }
- 
+
   /* ── Result count ── */
   .result-meta {
-    font-size: 12px;
+    font-size: 13.5px;
     color: var(--ink-pale);
     margin-bottom: 1.25rem;
   }
- 
+
   /* ── Category sections ── */
   .section-header {
     display: flex;
@@ -268,18 +322,18 @@
     border-radius: 50%;
     flex-shrink: 0;
   }  .section-title {
-    font-size: 13px;
+    font-size: 14.5px;
     font-weight: 500;
     letter-spacing: .06em;
     text-transform: uppercase;
     color: var(--ink-soft);
   }
   .section-count {
-    font-size: 12px;
+    font-size: 13.5px;
     color: var(--ink-pale);
     margin-left: auto;
   }
- 
+
   /* ── Cards ── */
   .cards-grid {
     display: grid;
@@ -297,7 +351,7 @@
   }
   .card:hover { border-color: var(--border-strong); box-shadow: var(--shadow-sm); }
   .card.expanded { border-color: var(--green-bright); box-shadow: var(--shadow-md); }
- 
+
   .card-top {
     padding: 1rem 1.25rem .75rem;
     cursor: pointer;
@@ -310,7 +364,7 @@
     margin-bottom: 8px;
   }
   .cat-chip {
-    font-size: 10.5px;
+    font-size: 12px;
     font-weight: 500;
     padding: 3px 10px;
     border-radius: 12px;
@@ -323,13 +377,13 @@
   .chip-procurement { background: var(--amber-light); color: var(--amber); }
   .chip-productivity { background: var(--purple-light); color: var(--purple-dark); }
   .card-title {
-    font-size: 14.5px;
+    font-size: 16.5px;
     font-weight: 500;
     color: var(--ink);
     line-height: 1.4;
   }
   .card-desc {
-    font-size: 13px;
+    font-size: 14.5px;
     color: var(--ink-soft);
     line-height: 1.55;
   }
@@ -341,7 +395,7 @@
     margin-top: auto;
   }
   .expand-hint {
-    font-size: 11.5px;
+    font-size: 13px;
     color: var(--ink-pale);
     display: flex;
     align-items: center;
@@ -355,7 +409,7 @@
     align-items: center;
   }
   .badge {
-    font-size: 10.5px;
+    font-size: 12px;
     padding: 2px 8px;
     border-radius: 10px;
     font-weight: 500;
@@ -363,7 +417,7 @@
   .badge-agent { background: var(--green-pale); color: var(--green-dark); border: 1px solid var(--green-light); }
   .badge-coming { background: var(--amber-light); color: var(--amber); border: 1px solid #fde68a; }
   .badge-claude { background: #f3f0ff; color: #5b21b6; border: 1px solid #ddd6fe; }
- 
+
   /* ── Expanded panel ── */
   .card-body {
     display: none;
@@ -375,7 +429,7 @@
     padding: 1rem 1.25rem;
   }
   .prompt-label {
-    font-size: 10.5px;
+    font-size: 12px;
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: .06em;
@@ -384,7 +438,7 @@
   }
   .prompt-text {
     font-family: 'DM Mono', monospace;
-    font-size: 12px;
+    font-size: 13.5px;
     line-height: 1.65;
     color: var(--ink-mid);
     white-space: pre-wrap;
@@ -401,7 +455,7 @@
     border-top: 1px solid var(--border);
   }
   .tool-info {
-    font-size: 12px;
+    font-size: 13.5px;
     color: var(--ink-soft);
     display: flex;
     align-items: center;
@@ -415,10 +469,10 @@
     flex-wrap: wrap;
   }
   .btn {
-    font-size: 12px;
+    font-size: 13.5px;
     font-family: inherit;
     font-weight: 500;
-    padding: 5px 14px;
+    padding: 6px 15px;
     border-radius: 8px;
     border: 1.5px solid var(--border-strong);
     background: var(--surface);
@@ -432,17 +486,17 @@
   }
   .btn:hover { background: var(--surface-mid); border-color: var(--ink-soft); }
   .btn-copy.copied { background: var(--green-pale); border-color: var(--green-bright); color: var(--green-dark); }
-  .btn-agent { background: var(--green-dark); border-color: var(--green-dark); color: #fff; font-size: 13px; padding: 6px 16px; }
+  .btn-agent { background: var(--green-dark); border-color: var(--green-dark); color: #fff; font-size: 14.5px; padding: 7px 17px; }
   .btn-agent:hover { background: var(--green-mid); border-color: var(--green-mid); color: #fff; }
- 
+
   /* ── Agent banner ── */
   .agent-banner {
     background: linear-gradient(90deg, #edf8f3 0%, #d4f0e5 100%);
     border-bottom: 1px solid var(--green-light);
     color: var(--green-dark);
-    font-size: 12px;
+    font-size: 13.5px;
     font-weight: 500;
-    padding: 7px 1.25rem;
+    padding: 8px 1.25rem;
     display: flex;
     align-items: center;
     gap: 6px;
@@ -450,47 +504,48 @@
   .card.has-agent { border-color: var(--green-light); }
   .card.has-agent:hover { border-color: var(--green-bright); }
   .card.has-agent.expanded { border-color: var(--green-bright); }
- 
+
   /* ── Section emoji ── */
   .section-emoji {
-    font-size: 18px;
+    font-size: 20px;
     line-height: 1;
     flex-shrink: 0;
   }
- 
+
   /* ── Empty state ── */
   .empty-state {
     text-align: center;
     padding: 4rem 2rem;
     color: var(--ink-pale);
   }
-  .empty-state p { font-size: 14px; }
- 
+  .empty-state p { font-size: 15.5px; }
+
   /* ── Footer ── */
   footer {
     background: var(--ink);
     color: rgba(255,255,255,.5);
     text-align: center;
     padding: 1.5rem;
-    font-size: 12px;
+    font-size: 13.5px;
   }
   footer a { color: rgba(255,255,255,.7); text-decoration: none; }
   footer a:hover { color: #fff; }
- 
+
   /* ── Responsive ── */
   @media (max-width: 600px) {
     header { padding: 2rem 1.25rem 1.75rem; }
     main { padding: 1.5rem 1.25rem 3rem; }
-    .tips-inner { padding: 1rem 1.25rem; }
+    .tips-inner, .lb-inner { padding: 1rem 1.25rem; }
     .search-input { width: 100%; }
     .controls { flex-direction: column; align-items: stretch; }
     .search-wrap { width: 100%; }
     .search-input { width: 100%; }
+    .lb-chartbox { height: 520px; }
   }
 </style>
 </head>
 <body>
- 
+
 <header>
   <div class="header-inner">
     <div class="header-tag">
@@ -506,7 +561,7 @@
     </div>
   </div>
 </header>
- 
+
 <div class="tips-strip">
   <div class="tips-inner">
     <button class="tips-toggle" id="tips-btn" onclick="toggleTips()">
@@ -523,7 +578,32 @@
     </div>
   </div>
 </div>
- 
+
+<div class="lb-strip">
+  <div class="lb-inner">
+    <button class="lb-toggle" id="lb-btn" onclick="toggleLb()">
+      📊 Team AI adoption — Q2 2026 leaderboard
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6l4 4 4-4"/></svg>
+    </button>
+    <div class="lb-content" id="lb-content">
+      <div class="lb-card">
+        <div class="lb-title">How our prompt usage has grown</div>
+        <div class="lb-sub">Prompts across all apps (last 30 days), April–June 2026. Names are masked — see who can guess who! 🌱</div>
+        <div class="lb-stats">
+          <div class="lb-stat"><div class="l">Total (Apr–Jun)</div><div class="v">4,586</div></div>
+          <div class="lb-stat"><div class="l">April</div><div class="v">990</div></div>
+          <div class="lb-stat"><div class="l">May</div><div class="v">1,965</div></div>
+          <div class="lb-stat"><div class="l">June</div><div class="v">1,631</div></div>
+        </div>
+        <div class="lb-legend" id="lb-legend"></div>
+        <div class="lb-chartbox">
+          <canvas id="lb-chart" role="img" aria-label="Line chart showing each masked team member's monthly prompt count for April, May and June 2026.">Monthly prompt trends per person.</canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <main>
   <div class="controls">
     <div class="filter-pills" id="filters">
@@ -541,11 +621,11 @@
   <div class="result-meta" id="result-meta"></div>
   <div id="content"></div>
 </main>
- 
+
 <footer>
   Climate Change Division · Save the Children Australia &nbsp;·&nbsp; <a href="https://www.savethechildren.org.au" target="_blank">savethechildren.org.au</a>
 </footer>
- 
+
 <script>
 const CASES = [
   {
@@ -716,7 +796,7 @@ const CASES = [
     agent: false, coming: false
   }
 ];
- 
+
 const CATS = ['Proposal Development', 'Project Implementation', 'Procurement', 'General Productivity'];
 const CAT_DOTS = {
   'Proposal Development': '#185FA5',
@@ -742,12 +822,12 @@ const CAT_EMOJI = {
   'Procurement': '🔍',
   'General Productivity': '📈'
 };
- 
+
 let activeFilter = 'all';
 let expanded = new Set();
- 
+
 document.getElementById('all-count').textContent = CASES.length;
- 
+
 document.getElementById('filters').addEventListener('click', e => {
   const btn = e.target.closest('.pill');
   if (!btn) return;
@@ -755,14 +835,72 @@ document.getElementById('filters').addEventListener('click', e => {
   document.querySelectorAll('.pill').forEach(p => p.classList.toggle('active', p === btn));
   render();
 });
- 
+
 function toggleTips() {
   const btn = document.getElementById('tips-btn');
   const content = document.getElementById('tips-content');
   btn.classList.toggle('open');
   content.classList.toggle('open');
 }
- 
+
+let lbChartDrawn = false;
+function toggleLb() {
+  const btn = document.getElementById('lb-btn');
+  const content = document.getElementById('lb-content');
+  btn.classList.toggle('open');
+  content.classList.toggle('open');
+  if (content.classList.contains('open') && !lbChartDrawn) {
+    drawLeaderboard();
+    lbChartDrawn = true;
+  }
+}
+
+function drawLeaderboard() {
+  const people = [
+    { alias: "Captain Promptastic", data: [286, 648, 450], color: "#534AB7" },
+    { alias: "The Prompt Whisperer", data: [224, 305, 187], color: "#1D9E75" },
+    { alias: "Query Queen", data: [59, 273, 257], color: "#D85A30" },
+    { alias: "Señor Syntax", data: [64, 188, 209], color: "#378ADD" },
+    { alias: "Prompt-a-saurus Rex", data: [98, 174, 107], color: "#D4537E" },
+    { alias: "The Context King", data: [182, 106, 98], color: "#BA7517" },
+    { alias: "Token Tornado", data: [17, 105, 106], color: "#639922" },
+    { alias: "Major Tokenheimer", data: [51, 82, 80], color: "#888780" },
+    { alias: "The Late Bloomer", data: [9, 47, 84], color: "#5DCAA5" },
+    { alias: "Zero-to-Hero", data: [0, 37, 53], color: "#ED93B1" }
+  ];
+  const dashes = [[], [6,3], [2,3], [8,3,2,3], [], [6,3], [2,3], [8,3,2,3], [], [6,3]];
+  const points = ['circle','triangle','rect','rectRot','star','circle','triangle','rect','rectRot','star'];
+
+  const legend = document.getElementById('lb-legend');
+  people.forEach((p, i) => {
+    const s = document.createElement('span');
+    s.innerHTML = '<span class="lb-swatch" style="border-top:3px '+(dashes[i].length?'dashed':'solid')+' '+p.color+';"></span>' + p.alias;
+    legend.appendChild(s);
+  });
+
+  new Chart(document.getElementById('lb-chart'), {
+    type: 'line',
+    data: {
+      labels: ['April', 'May', 'June'],
+      datasets: people.map((p, i) => ({
+        label: p.alias, data: p.data,
+        borderColor: p.color, backgroundColor: p.color,
+        borderDash: dashes[i], pointStyle: points[i],
+        pointRadius: 6, pointHoverRadius: 9, borderWidth: 3, tension: 0.3
+      }))
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      interaction: { mode: 'nearest', intersect: false },
+      scales: {
+        y: { beginAtZero: true, grid: { color: 'rgba(128,128,128,0.12)' }, ticks: { color: '#6b7280', font: { size: 14 } }, title: { display: true, text: 'Prompts (last 30 days)', color: '#6b7280', font: { size: 15 } } },
+        x: { grid: { display: false }, ticks: { color: '#111827', font: { size: 17 } } }
+      },
+      plugins: { legend: { display: false }, tooltip: { titleFont: { size: 14 }, bodyFont: { size: 14 } } }
+    }
+  });
+}
+
 function toggleCard(idx) {
   if (expanded.has(idx)) expanded.delete(idx); else expanded.add(idx);
   const card = document.getElementById('card-' + idx);
@@ -771,7 +909,7 @@ function toggleCard(idx) {
   const hint = card.querySelector('.expand-hint span');
   if (hint) hint.textContent = expanded.has(idx) ? 'Collapse' : 'Expand prompt';
 }
- 
+
 function copyPrompt(idx, btn) {
   const c = CASES[idx];
   navigator.clipboard.writeText(c.prompt).then(() => {
@@ -780,7 +918,7 @@ function copyPrompt(idx, btn) {
     setTimeout(() => { btn.classList.remove('copied'); btn.textContent = 'Copy prompt'; }, 1800);
   });
 }
- 
+
 function render() {
   const q = (document.getElementById('search').value || '').toLowerCase().trim();
   const filtered = CASES.filter((c, i) => {
@@ -788,20 +926,20 @@ function render() {
     const matchQ = !q || c.title.toLowerCase().includes(q) || c.desc.toLowerCase().includes(q) || c.cat.toLowerCase().includes(q) || c.tool.toLowerCase().includes(q);
     return matchCat && matchQ;
   });
- 
+
   document.getElementById('result-meta').textContent =
     filtered.length === CASES.length ? '' : `Showing ${filtered.length} of ${CASES.length} use cases`;
- 
+
   const wrap = document.getElementById('content');
- 
+
   if (!filtered.length) {
     wrap.innerHTML = '<div class="empty-state"><p>No matching use cases. Try a different search.</p></div>';
     return;
   }
- 
+
   const catsToShow = activeFilter === 'all' ? CATS : [activeFilter];
   let html = '';
- 
+
   catsToShow.forEach(cat => {
     const items = filtered.filter(c => c.cat === cat);
     if (!items.length) return;
@@ -811,7 +949,7 @@ function render() {
       <span class="section-count">${items.length} use case${items.length !== 1 ? 's' : ''}</span>
     </div>
     <div class="cards-grid">`;
- 
+
     items.forEach(c => {
       const idx = CASES.indexOf(c);
       const isExp = expanded.has(idx);
@@ -859,16 +997,15 @@ function render() {
     });
     html += '</div>';
   });
- 
+
   wrap.innerHTML = html;
 }
- 
+
 function escHtml(str) {
   return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
- 
+
 render();
 </script>
 </body>
 </html>
- 
